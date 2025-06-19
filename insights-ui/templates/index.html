@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Problem Clusters</title>
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 0;
+            background: #f7f9fb;
+            color: #222;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto 0 auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            padding: 32px 36px 36px 36px;
+        }
+        h1 {
+            color: #1a365d;
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 32px;
+            letter-spacing: -1px;
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            margin: 0 0 24px 0;
+            padding: 0;
+        }
+        .problem-card {
+            background: linear-gradient(90deg, #e3eefd 0%, #f7f9fb 100%);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(30,64,175,0.06);
+            padding: 24px 28px 20px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: box-shadow 0.2s;
+            position: relative;
+        }
+        .problem-card:hover {
+            box-shadow: 0 6px 24px rgba(30,64,175,0.13);
+        }
+        .problem-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .problem-text {
+            font-size: 1.13rem;
+            font-weight: 500;
+            color: #1a365d;
+            flex: 1;
+        }
+        .count {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2563eb;
+            background: #e0e7ff;
+            border-radius: 8px;
+            padding: 4px 12px;
+            margin-left: 16px;
+        }
+        .problem-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .btn {
+            font-family: inherit;
+            font-size: 0.98rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 7px;
+            padding: 8px 18px;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+            box-shadow: 0 1px 2px rgba(30,64,175,0.04);
+        }
+        .btn-insights {
+            background: #2563eb;
+            color: #fff;
+        }
+        .btn-insights:hover {
+            background: #1e40af;
+        }
+        .btn-contact {
+            background: #fbbf24;
+            color: #1a365d;
+        }
+        .btn-contact:hover {
+            background: #f59e0b;
+        }
+        .btn-comments {
+            background: #e0e7ff;
+            color: #2563eb;
+        }
+        .btn-comments:hover {
+            background: #c7d2fe;
+        }
+        .contact-dropdown {
+            display: none;
+            margin-top: 14px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 16px 20px;
+            box-shadow: 0 1px 4px rgba(30,64,175,0.07);
+            font-size: 0.98rem;
+            color: #334155;
+            animation: fadeIn 0.3s;
+        }
+        .contact-dropdown.active {
+            display: block;
+        }
+        .contact-info p {
+            margin: 0 0 4px 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        @media (max-width: 600px) {
+            .container { padding: 16px 6px; }
+            .problem-card { padding: 14px 8px 12px 8px; }
+            h1 { font-size: 1.2rem; }
+        }
+    </style>
+    <script>
+        function toggleContactInfo(idx) {
+            var el = document.getElementById('contact-' + idx);
+            if (el.classList.contains('active')) {
+                el.classList.remove('active');
+            } else {
+                el.classList.add('active');
+            }
+        }
+        function showFurtherInsights(problem) {
+            alert("Further insights for:\n\n" + problem);
+        }
+        function toggleComments(idx) {
+            alert("Comments for problem #" + idx + " coming soon!");
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Problems Faced by State Farm Employees &amp; Agents</h1>
+        <ul>
+            {% for problem, count in clusters %}
+            <li>
+                <div class="problem-card">
+                    <div class="problem-header">
+                        <span class="problem-text">{{ problem }}</span>
+                        <span class="count">{{ count }}</span>
+                    </div>
+                    <div class="problem-actions">
+                        <button class="btn btn-comments" onclick="showFurtherInsights('{{ problem }}')">
+                            Learn More
+                        </button>
+                        <button class="btn btn-comments" onclick="toggleContactInfo('{{ loop.index }}')">
+                            Contact Info
+                        </button>
+                        <button class="btn btn-comments" onclick="toggleComments('{{ loop.index }}')">
+                            Comments
+                        </button>
+                    </div>
+                    <div class="contact-dropdown" id="contact-{{ loop.index }}">
+                        <div class="contact-info">
+                            {% if loop.index % 3 == 0 %}
+                                <p><strong>Anonymous Employee</strong></p>
+                                <p>Department: Claims Processing</p>
+                                <p>Contact: Anonymous</p>
+                            {% elif loop.index % 3 == 1 %}
+                                <p><strong>Sarah Johnson</strong></p>
+                                <p>Department: Customer Service</p>
+                                <p>Email: sarah.johnson@statefarm.com</p>
+                                <p>Phone: (555) 123-4567</p>
+                            {% else %}
+                                <p><strong>Anonymous Agent</strong></p>
+                                <p>Department: Sales</p>
+                                <p>Contact: Anonymous</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
